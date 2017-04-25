@@ -1,0 +1,38 @@
+MAXIMIZE
+
+Objective function:
+	150x + 175y = z
+	
+Constraints:
+	7x + 11y <= 77
+	10x + 8y <= 80
+	x <= 9
+	y <= 6
+------------------------
+Objective function:
+	x+y=z
+
+Constraints:
+	x+y<=2
+	3x+y>=4
+	x>=0
+	y>=0
+------------------------	
+
+MINIMIZE
+
+Objective function:
+	0.12x + 0.15y = z
+
+Constraints:
+	60x + 60y >= 300 
+	12x + 6y >= 36 
+	10x + 30y >= 90
+------------------------
+Objective function:
+	3x + 2y = z
+
+Constraints:
+	2x + y >= 6
+	x + y >= 4
+------------------------

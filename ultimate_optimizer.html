@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CMSC 150 Project Homepage</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/design.css" rel="stylesheet">
+   
+    <script src="assets/js/jquery-1.10.2.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/make_table.js"></script>
+    <script src="assets/js/simplex_method.js"></script>
+    <script src="assets/js/parse_input.js"></script>
+    <script src="assets/js/diet_solver.js"></script>
+    <script src="assets/js/data_in_json.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){$("#table_container").hide();});
+    $(document).ready(function(){$("#results").hide();});
+
+    var count = 1;
+    var tbox_count = 5;
+
+    </script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse" role="navigation" style="background-color: #2C3E50;">
+		<ul class="nav navbar-nav">
+			<a class="navbar-brand" href="#">CMSC 150</a>
+  			<li class="ult_opt active"><a href="#ultimate_opt" data-toggle="tab">Ultimate Optimizer</a></li>
+  			<li class="diet_solver"><a href="#diet_solver" data-toggle="tab">Diet Solver</a></li>
+  		</ul>
+	</nav>
+
+    <div id="main_div">    
+        <div class="content">
+            <div id="user_input" class="tab-content">
+                <div id="ultimate_opt" class="tab-pane active">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h4>ULTIMATE OPTIMIZER</h4></div>
+                            <div class="panel-body">
+                            <form>
+                	         OBJECTIVE FUNCTION:<br>
+                                <div class="input-group input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <input type="text" id="of" class="form-control" placeholder="Format: ax + by = z">
+                                </div><br>
+
+                	           CONSTRAINTS (i.e. x + y <=0 or x + y >= 0): <br>
+                	           <div class="buttons_div">
+                                    <div class="input-group input-group">
+                                        <span class="input-group-addon">1</span>
+                                        <input type="text" id="cons1" class="form-control" placeholder="Constraint 1">
+                                    </div><br>
+                                    <div class="input-group input-group">
+                                        <span class="input-group-addon">2</span>
+                                        <input type="text" id="cons2" class="form-control" placeholder="Constraint 2">
+                                    </div><br>
+                                    <div class="input-group input-group">
+                                        <span class="input-group-addon">3</span>
+                                        <input type="text" id="cons3" class="form-control" placeholder="Constraint 3">
+                                    </div><br>
+                                    <div class="input-group input-group">
+                                        <span class="input-group-addon">4</span>
+                                        <input type="text" id="cons4" class="form-control" placeholder="Constraint 4">
+                                    </div><br>
+                                </div>
+
+                                <button type="button" id="add" class="btn btn-danger" onclick="remove_constraints()" style="float: right; margin-left:5px;"><span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                                <button type="button" id="add" class="btn btn-primary" onclick="add_constraints()" style="float: right;">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                </button><br><br>
+
+                                <div class="input-group" style="width:260px;">
+                                    <span class="input-group-addon"><input type="radio" id="max" name="min_max" checked='checked'></span>
+                                    <input type="text" class="form-control" disabled="disabled" placeholder="Maximize">
+                                    <span class="input-group-addon"><input type="radio" id="min" name="min_max"></span>
+                                    <input type="text" class="form-control" disabled="disabled" placeholder="Minimize">
+                                </div><br>
+
+                	           <button type="button" class="btn btn-primary" onclick="submit_inputs()">Submit</button>
+                               <input type="reset" value ="Reset" class="btn btn-danger">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!--DIET SOLVER -->
+
+                <div id="diet_solver" class="tab-pane" style="margin-left: 20px;">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading"><h4>FOOD SELECTIONS</h4></div>
+                    <div id="results" style="margin: 20px 20px 20px 300px;">
+                      
+                    </div>
+                    <form>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                              Dairy Products
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox22" value="22" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox22" type="text" class="form-control" value="Butter" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox23" value="23" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox23" type="text" class="form-control" value="Cheddar Cheese" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox27"value="27"type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox27"type="text" class="form-control" value="Poached Egg" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox28" value="28"type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox28"type="text" class="form-control" value="Scrambled Egg" disabled="disabled">
+                            </div>
+                              <label for="cbox22"><img class="images"src="assets/images/butter.png" onclick="image_click(22)"></label>
+                              <label for="cbox23"><img class="images"src="assets/images/cheddar.png" onclick="image_click(23)"></label>
+                              <label for="cbox27"><img class="images"src="assets/images/poached.png" onclick="image_click(27)"></label>
+                            <label for="cbox28"><img class="images"src="assets/images/scrambled.png" onclick="image_click(28)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox26" value="26"type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox26"type="text" class="form-control" value="Skim Milk" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox25" value="25" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox25" type="text" class="form-control" value="Low Fat Milk" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox24" value="24" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox24" type="text" class="form-control" value="Whole Milk" disabled="disabled">
+                            </div>
+
+                            <label for="cbox26"><img class="images3"src="assets/images/skim milk.png" onclick="image_click(26)"></label>
+                            <label for="cbox25"><img class="images3"src="assets/images/low fat milk.png" onclick="image_click(25)"></label>
+                              <label for="cbox24"><img class="images3"src="assets/images/whole milk.png" onclick="image_click(24)"></label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              Meat Products
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                          <div class="panel-body">
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox8" value="8" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox8" type="text" class="form-control" value="Roasted Chicken" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox29" value="29" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox29" type="text" class="form-control" value="Turkey Bologna" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox30" value="30" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox30" type="text" class="form-control" value="Frankfurter" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox31" value="31" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox31" type="text" class="form-control" value="Ham" disabled="disabled">
+                            </div>
+                
+                              <label for="cbox8"><img class="images"src="assets/images/roasted.png" onclick="image_click(8)"></label>
+                              <label for="cbox29"><img class="images"src="assets/images/turkey.png" onclick="image_click(29)"></label>
+                              <label for="cbox30"><img class="images"src="assets/images/frankfurter.png" onclick="image_click(30)"></label>
+                              <label for="cbox31"><img class="images"src="assets/images/ham.png" onclick="image_click(31)"></label>
+                            
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox32" value="32" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox32" type="text" class="form-control" value="Kielbasa" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox44" value="44" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox44" type="text" class="form-control" value="Hotdog" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox49" value="49" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox49" type="text" class="form-control" value="Pork" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox43" value="43" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox43" type="text" class="form-control" value="Hamburger" disabled="disabled">
+                            </div>
+
+                              <label for="cbox32"><img class="images"src="assets/images/kielbasa.png" onclick="image_click(32)"></label>
+                              <label for="cbox44"><img class="images"src="assets/images/hotdog.png" onclick="image_click(44)"></label>
+                              <label for="cbox49"><img class="images"src="assets/images/pork.png" onclick="image_click(49)"></label>
+                              <label for="cbox43"><img class="images"src="assets/images/hamburger.png" onclick="image_click(43)"></label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                              Fish Products
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                          <div class="panel-body">
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox50" value="50" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox50" type="text" class="form-control" value="Sardines in Oil" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox51" value="51" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox51" type="text" class="form-control" value="White Tuna in Water" disabled="disabled">
+                            </div>
+
+                              <label for="cbox50"><img class="images2"src="assets/images/sardines.png" onclick="image_click(50)"></label>
+                              <label for="cbox51"><img class="images2"src="assets/images/tuna.png" onclick="image_click(51)"></label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFour">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                              Fruits & Vegetables
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                          <div class="panel-body">
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox0" value="0" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox0" type="text" class="form-control" value="Broccoli" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox1" value="1" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox1" type="text" class="form-control" value="Carrots" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox2" value="2" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox2" type="text" class="form-control" value="Celery" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox4" value="4" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox4" type="text" class="form-control" value="Lettuce" disabled="disabled">
+                            </div>
+
+                              <label for="cbox0"><img class="images"src="assets/images/broccoli.png" onclick="image_click(0)"></label>
+                              <label for="cbox1"><img class="images"src="assets/images/carrot.png" onclick="image_click(1)"></label>
+                              <label for="cbox2"><img class="images"src="assets/images/celery.png" onclick="image_click(2)"></label>
+                              <label for="cbox4"><img class="images"src="assets/images/lettuce.png" onclick="image_click(4)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox5" value="5" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox5" type="text" class="form-control" value="Peppers" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox6" value="6" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox6" type="text" class="form-control" value="Potatoes" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox15" value="15" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox15" type="text" class="form-control" value="Oranges" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox10" value="10" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox10" type="text" class="form-control" value="Tomato" disabled="disabled">
+                            </div>
+
+                              <label for="cbox5"><img class="images"src="assets/images/pepper.png" onclick="image_click(5)"></label>
+                              <label for="cbox6"><img class="images"src="assets/images/potato.png" onclick="image_click(6)"></label>
+                              <label for="cbox15"><img class="images"src="assets/images/orange.png" onclick="image_click(15)"></label>
+                              <label for="cbox10"><img class="images"src="assets/images/tomato.png" onclick="image_click(10)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox11" value="11" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox11" type="text" class="form-control" value="Apple" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox12" value="12" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox12" type="text" class="form-control" value="Banana" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox13" value="13" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox13" type="text" class="form-control" value="Grapes" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox14" value="14" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox14" type="text" class="form-control" value="Kiwi" disabled="disabled">
+                            </div>
+
+                              <label for="cbox11"><img class="images"src="assets/images/apple.png" onclick="image_click(11)"></label>
+                              <label for="cbox12"><img class="images"src="assets/images/banana.png" onclick="image_click(12)"></label>
+                              <label for="cbox13"><img class="images"src="assets/images/grapes.png" onclick="image_click(13)"></label>
+                              <label for="cbox14"><img class="images"src="assets/images/kiwi.png" onclick="image_click(14)"></label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFive">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                              Snacks
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                          <div class="panel-body">
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox20" value="20" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox20" type="text" class="form-control" value="Apple Pie" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox21" value="21" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox21" type="text" class="form-control" value="Choco Chip Cookies" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox16" value="16" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox16" type="text" class="form-control" value="Bagel" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox47" value="47" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox47" type="text" class="form-control" value="Macaroni" disabled="disabled">
+                            </div>
+
+                              <label for="cbox20"><img class="images"src="assets/images/apple pie.png" onclick="image_click(20)"></label>
+                              <label for="cbox21"><img class="images"src="assets/images/choco chip.png" onclick="image_click(21)"></label>
+                              <label for="cbox16"><img class="images"src="assets/images/bagel.png" onclick="image_click(16)"></label>
+                              <label for="cbox47"><img class="images"src="assets/images/macaroni.png" onclick="image_click(47)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox48" value="48" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox48" type="text" class="form-control" value="Peanut Butter" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox41" value="41" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox41" type="text" class="form-control" value="Pizza w/ Pepperoni" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox9" value="9" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox9" type="text" class="form-control" value="Spaghetti w/ Sauce" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox42" value="42" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox42" type="text" class="form-control" value="Taco" disabled="disabled">
+                            </div>
+
+                              <label for="cbox48"><img class="images"src="assets/images/pb.png" onclick="image_click(48)"></label>
+                              <label for="cbox41"><img class="images"src="assets/images/pizza.png" onclick="image_click(41)"></label>
+                              <label for="cbox9"><img class="images"src="assets/images/spag.png" onclick="image_click(9)"></label>
+                              <label for="cbox42"><img class="images"src="assets/images/taco.png" onclick="image_click(42)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox52" value="52" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox52" type="text" class="form-control" value="Popcorn" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox53" value="53" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox53" type="text" class="form-control" value="Potato Chips" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox54" value="54" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox54" type="text" class="form-control" value="Pretzels" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox55" value="55" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox55" type="text" class="form-control" value="Tortilla Chips" disabled="disabled">
+                            </div>
+
+                              <label for="cbox52"><img class="images"src="assets/images/popcorn.png" onclick="image_click(52)"></label>
+                              <label for="cbox53"><img class="images"src="assets/images/chips.png" onclick="image_click(53)"></label>
+                              <label for="cbox54"><img class="images"src="assets/images/pretzel.png" onclick="image_click(54)"></label>
+                              <label for="cbox55"><img class="images"src="assets/images/tortilla.png" onclick="image_click(55)"></label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingSix">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                              Soup Selections
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                          <div class="panel-body">
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox56" value="56" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox56" type="text" class="form-control" value="Chicken Noodle Soup" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox57" value="57" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox57" type="text" class="form-control" value="Split Pea & Ham Soup" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox58" value="58" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox58" type="text" class="form-control" value="Vegetable Beef Soup" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox59" value="59" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox59" type="text" class="form-control" value="New England Clam Chowder" disabled="disabled">
+                            </div>
+
+                              <label for="cbox56"><img class="images"src="assets/images/noodle.png" onclick="image_click(56)"></label>
+                              <label for="cbox57"><img class="images"src="assets/images/ham soup.png" onclick="image_click(57)"></label>
+                              <label for="cbox58"><img class="images"src="assets/images/beef soup.png" onclick="image_click(58)"></label>
+                              <label for="cbox59"><img class="images"src="assets/images/clam chowder.png" onclick="image_click(59)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox60" value="60" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox60" type="text" class="form-control" value="Tomato Soup" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox61" value="61" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox61" type="text" class="form-control" value="New England Clam Chowder w/ Milk" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox62" value="62" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox62" type="text" class="form-control" value="Cream of Mushroom Soup w/ Milk" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox63" value="63" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox63" type="text" class="form-control" value="Bean Bacon Soup w/ Water" disabled="disabled">
+                            </div>
+
+                              <label for="cbox60"><img class="images"src="assets/images/tomato soup.png" onclick="image_click(60)"></label>
+                              <label for="cbox61"><img class="images"src="assets/images/clam with milk.png" onclick="image_click(61)"></label>
+                              <label for="cbox62"><img class="images"src="assets/images/mushroom.png" onclick="image_click(62)"></label>
+                              <label for="cbox63"><img class="images"src="assets/images/bean bacon.png" onclick="image_click(63)"></label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingSeven">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                              Grains & Legumes
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                          <div class="panel-body">
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox34" value="34" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox34" type="text" class="form-control" value="Cheerios" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox17" value="17" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox17" type="text" class="form-control" value="Wheat Bread" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox18" value="18" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox18" type="text" class="form-control" value="White Bread" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox19" value="19" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox19" type="text" class="form-control" value="Oatmeal Cookies" disabled="disabled">
+                            </div>
+
+                              <label for="cbox34"><img class="images"src="assets/images/cheerios.png" onclick="image_click(34)"></label>
+                              <label for="cbox17"><img class="images"src="assets/images/wheat.png" onclick="image_click(17)"></label>
+                              <label for="cbox18"><img class="images"src="assets/images/white.png" onclick="image_click(18)"></label>
+                              <label for="cbox19"><img class="images"src="assets/images/oatmeal cookies.png" onclick="image_click(19)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox33" value="33" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox33" type="text" class="form-control" value="Cap'n Crunch" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox35" value="35" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox35" type="text" class="form-control" value="Kellogg's Corn Flakes" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox36" value="36" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox36" type="text" class="form-control" value="Kellogg's Raisin Bran" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox37" value="37" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox37" type="text" class="form-control" value="Rice Krispies" disabled="disabled">
+                            </div>
+
+                              <label for="cbox33"><img class="images"src="assets/images/crunch.png" onclick="image_click(33)"></label>
+                              <label for="cbox35"><img class="images"src="assets/images/corn flakes.png" onclick="image_click(35)"></label>
+                              <label for="cbox36"><img class="images"src="assets/images/raisin bran.png" onclick="image_click(36)"></label>
+                              <label for="cbox37"><img class="images"src="assets/images/krispies.png" onclick="image_click(37)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox38" value="38" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox38" type="text" class="form-control" value="Special K" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox39" value="39" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox39" type="text" class="form-control" value="Oatmeal" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox40" value="40" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox40" type="text" class="form-control" value="Malt-O-Meal" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox45" value="45" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox45" type="text" class="form-control" value="Couscous" disabled="disabled">
+                            </div>
+
+                              <label for="cbox38"><img class="images"src="assets/images/special.png" onclick="image_click(38)"></label>
+                              <label for="cbox39"><img class="images"src="assets/images/oatmeal.png" onclick="image_click(39)"></label>
+                              <label for="cbox40"><img class="images"src="assets/images/malt.png" onclick="image_click(40)"></label>
+                              <label for="cbox45"><img class="images"src="assets/images/couscous.png" onclick="image_click(45)"></label>
+
+                            <div class="input-group">
+                              <span class="input-group-addon"><input id="cbox7" value="7" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox7" type="text" class="form-control" value="Tofu" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox3" value="3" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox3" type="text" class="form-control" value="Corn" disabled="disabled">
+                              <span class="input-group-addon"><input id="cbox46" value="46" type="checkbox" class="cbox" hidden="hidden"></span>
+                              <input id="tbox46" type="text" class="form-control" value="White Rice" disabled="disabled">
+                            </div>
+
+                              <label for="cbox7"><img class="images3"src="assets/images/tofu.png" onclick="image_click(7)"></label>
+                              <label for="cbox3"><img class="images3"src="assets/images/corn.png" onclick="image_click(3)"></label>
+                              <label for="cbox46"><img class="images3"src="assets/images/rice.png" onclick="image_click(46)"></label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <div style="padding: 0px 0px 10px 10px;">
+                  <button type="button" class="btn btn-primary" data-toggle="collapse" data-target=".collapse.in" onclick="solve_diet()">Submit</button>
+                  <button type="button" class="btn btn-success" onclick="select_all()">Select All</button>
+                  <input type="reset" value ="Reset" class="btn btn-danger">
+                </div>
+                </form>
+                
+              </div>
+              
+            </div>
+
+            </div>
+
+            <div id="table_container" class="table-responsive">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" style="font-weight: bold;"><h4>SIMPLEX METHOD SOLUTION</h4></div>
+                    <div id="table_body" class="panel-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
